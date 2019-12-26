@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OCCBPackage", "src\OCCBPack
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{393E4C8D-6D7F-4F24-80D6-5B7F4F3FE030}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		.travis.yml = .travis.yml
 		OCCBPackage\README.md = OCCBPackage\README.md
 	EndProjectSection
 EndProject

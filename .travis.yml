@@ -1,6 +1,7 @@
 language: csharp
 dotnet: 3.0
-solution: DBApi.sln
+solution: OCCBPackage.sln
 script:
     - dotnet restore
     - dotnet build
+    - dotnet pack
