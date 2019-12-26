@@ -4,4 +4,6 @@ solution: OCCBPackage.sln
 script:
     - dotnet restore
     - dotnet build
-    - dotnet pack
+    - dotnet pack --configuration Release
+
+    
