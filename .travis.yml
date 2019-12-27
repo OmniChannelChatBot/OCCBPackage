@@ -6,15 +6,12 @@ mono: none
 dotnet: 3.0
 solution: OCCBPackage.sln
 
-branches:
-    only:
-        - master
 before_script:
-  - dotnet restore
+    - dotnet restore
 script:
     - dotnet build
 
- before_deploy: 
+before_deploy: 
     - git checkout origin/master && git fetch && git remote set-url origin https://${GITHUB_OAUTH_TOKEN}@github.com/OmniChannelChatBot/OCCBPackage.git
     - PR_TITLE=$(git log -1 --pretty='%f')
     - FEATURE=$([[ $PR_TITLE == 'feature' ]] && echo 1 || echo 0)
