@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OCCBPackage.Filters
 {
-    internal class ApiResultFilter : IAsyncResultFilter
+    public class ApiResultFilter : IAsyncResultFilter
     {
         public Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
