@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace OCCBPackage
+namespace OCCBPackage.Mvc
 {
-    public static class Constants
+    internal static class Constants
     {
         public static readonly IDictionary<int, ValueTuple<string, string>> ProblemTypes = new Dictionary<int, ValueTuple<string, string>>
             {

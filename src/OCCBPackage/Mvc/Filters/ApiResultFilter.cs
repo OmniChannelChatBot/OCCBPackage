@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System.Threading.Tasks;
 
-namespace OCCBPackage.Filters
+namespace OCCBPackage.Mvc.Filters
 {
-    public class ApiResultFilter : IAsyncResultFilter
+    internal class ApiResultFilter : IAsyncResultFilter
     {
         public Task OnResultExecutionAsync(ResultExecutingContext context, ResultExecutionDelegate next)
         {
@@ -30,7 +30,7 @@ namespace OCCBPackage.Filters
             return next();
         }
 
-        private void ResultApiProblemDetails(ResultExecutingContext resultExecutingContext, string title = default(string))
+        private void ResultApiProblemDetails(ResultExecutingContext resultExecutingContext, string title = default)
         {
             var apiProblemDetails = new ApiProblemDetails(resultExecutingContext.HttpContext, title);
             var objectResult = new ObjectResult(apiProblemDetails)
