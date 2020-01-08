@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
-namespace OCCBPackage
+namespace OCCBPackage.Mvc
 {
     /// <summary>
     /// https://tools.ietf.org/html/rfc7231
@@ -20,6 +20,13 @@ namespace OCCBPackage
                 .ToDictionary(
                     pair => pair.Key,
                     pair => pair.Value.Errors.Select(n => !string.IsNullOrEmpty(n.ErrorMessage) ? n.ErrorMessage : n.Exception.Message));
+
+        public ApiProblemDetails(HttpContext context, IList<ValidationFailure> errors)
+           : this(context) =>
+            Errors = errors
+                .GroupBy(g => g.PropertyName)
+                .ToDictionary(n => n.Key, n => n.Select(s => s.ErrorMessage));
+
 
         public ApiProblemDetails(HttpContext context, Exception exception)
               : this(context)
@@ -38,7 +45,7 @@ namespace OCCBPackage
             }
         }
 
-        public ApiProblemDetails(HttpContext context, string title = default(string), string instance = default(string))
+        public ApiProblemDetails(HttpContext context, string title = default)
         {
             if (Constants.ProblemTypes.TryGetValue(context.Response.StatusCode, out var problemType))
             {
@@ -48,7 +55,7 @@ namespace OCCBPackage
             Title = title ?? Constants.ProblemTypes[context.Response.StatusCode].Item1;
             TraceId = context.TraceIdentifier;
             Status = context.Response.StatusCode;
-            Instance = instance;
+            Instance = Environments.GetServiceName();
         }
 
         public string TraceId { get; }
