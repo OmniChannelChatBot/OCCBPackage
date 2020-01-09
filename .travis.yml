@@ -11,6 +11,7 @@ script:
 before_deploy: 
     - git checkout origin/master && git fetch && git remote set-url origin https://${GITHUB_OAUTH_TOKEN}@github.com/OmniChannelChatBot/OCCBPackage.git
     - PR_TITLE=$(git log -1 --pretty='%f')
+    - echo $PR_TITLE
     - FEATURE=$([[ $PR_TITLE == 'feature' ]] && echo 1 || echo 0)
     - RELEASE=$([[ $PR_TITLE == 'release' ]] && echo 1 || echo 0)
     - LAST_TAG=$(echo $(git describe --tags $(git rev-list --tags --max-count=1)) | cut -d'v' -f 2)
@@ -27,4 +28,4 @@ deploy:
     on:
         branch: master
 after_deploy:
-    - dotnet nuget push ./src/bin/Release/OCCBPackage.$PACKAGE_VERSION.nupkg -k $NUGET_API_KEY -s $NUGET_SOURCE
+    - dotnet nuget push ./src/OCCBPackage/bin/$CONFIGURATION/OCCBPackage.$PACKAGE_VERSION.nupkg -k $NUGET_API_KEY -s $NUGET_SOURCE
