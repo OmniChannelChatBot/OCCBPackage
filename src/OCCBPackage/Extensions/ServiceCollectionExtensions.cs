@@ -15,15 +15,13 @@ namespace OCCBPackage.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddJwtBearerAuthentication(this IServiceCollection services, Action<AccessTokenOptions> accessTokenOptions, Action<RefreshTokenOptions> refreshTokenOptions = default)
+        public static IServiceCollection AddJwtBearerAuthentication(this IServiceCollection services, Action<AccessTokenOptions> accessTokenOptions, Action<RefreshTokenOptions> refreshTokenOptions) => services
+            .AddJwtBearerAuthentication(accessTokenOptions)
+            .Configure(refreshTokenOptions);
+
+        public static IServiceCollection AddJwtBearerAuthentication(this IServiceCollection services, Action<AccessTokenOptions> accessTokenOptions)
         {
             services.Configure(accessTokenOptions);
-
-            if (refreshTokenOptions != default)
-            {
-                services.Configure(refreshTokenOptions);
-            }
-
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -44,13 +42,16 @@ namespace OCCBPackage.Extensions
                 {
                     OnMessageReceived = context =>
                     {
-                        var accessToken = context.Request.Query["access_token"];
+                        // TODO: When using WebSockets and server events, 
+                        //       the token is passed as a parameter of the query string with the access_token key
+                        //       https://docs.microsoft.com/ru-ru/aspnet/core/signalr/authn-and-authz?view=aspnetcore-3.1#bearer-token-authentication
+                        var accessToken = context.Request.Query["access_token"].ToString();
 
-                        if (!string.IsNullOrEmpty(accessToken)
-                            && (context.HttpContext.Request.Path.StartsWithSegments("/chat")))
+                        if (!string.IsNullOrEmpty(accessToken))
                         {
                             context.Token = accessToken;
                         }
+
                         return Task.CompletedTask;
                     },
                     OnChallenge = context =>
