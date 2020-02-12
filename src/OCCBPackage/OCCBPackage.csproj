@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <PackageId>OCCBPackage</PackageId>
     <Version>$(PackageVersion)</Version>
     <Authors>kantuz001,zexsm</Authors>
@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="8.6.1" />
     <PackageReference Include="MediatR" Version="8.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Annotations" Version="5.0.0" />
   </ItemGroup>
