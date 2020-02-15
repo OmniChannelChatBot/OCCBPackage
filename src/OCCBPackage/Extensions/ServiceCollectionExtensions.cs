@@ -7,8 +7,6 @@ namespace OCCBPackage.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        private static readonly string _corsPolicy = nameof(_corsPolicy);
-
         public static IServiceCollection AddCookiePolicy(this IServiceCollection services, Action<CookiePolicyOptions> actionCookiePolicyOptions) => services
             .Configure(actionCookiePolicyOptions);
 
@@ -18,7 +16,7 @@ namespace OCCBPackage.Extensions
             action.Invoke(clientOriginPolicyOptions);
 
             services.AddCors(sa => sa
-                .AddPolicy(_corsPolicy, cpb =>
+                .AddPolicy(CorsPolicyOptions.CorsPolicy, cpb =>
                 {
                     cpb.WithOrigins(clientOriginPolicyOptions.Origins);
                     cpb.WithMethods(clientOriginPolicyOptions.Methods);
