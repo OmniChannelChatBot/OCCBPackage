@@ -8,8 +8,8 @@ namespace OCCBPackage.Extensions
 {
     public static class SwaggerExtension
     {
-        private const string RoutePrefix = "api-doc";
-        private const string DefaultVersion = "v1";
+        private static readonly string _routePrefix = "api-doc";
+        private static readonly string _defaultVersion = "v1";
 
         public static IServiceCollection AddCustomSwagger(this IServiceCollection services, Action<SwaggerGenOptions> swaggerGenOptions = default)
         {
@@ -24,7 +24,7 @@ namespace OCCBPackage.Extensions
 
                 c.SwaggerDoc(serviceName, new OpenApiInfo
                 {
-                    Version = DefaultVersion,
+                    Version = _defaultVersion,
                     Title = serviceName,
                     Description = $"`{serviceName}`",
                     Contact = new OpenApiContact
@@ -41,15 +41,15 @@ namespace OCCBPackage.Extensions
         }
 
         public static IApplicationBuilder UseCustomSwagger(this IApplicationBuilder app) => app
-            .UseSwagger(options => options.RouteTemplate = $"{RoutePrefix}/{{documentName}}/swagger.json")
+            .UseSwagger(options => options.RouteTemplate = $"{_routePrefix}/{{documentName}}/swagger.json")
             .UseSwaggerUI(c =>
             {
                 var serviceName = Environments.GetServiceName();
-                var endpointName = $"{serviceName} {DefaultVersion}";
+                var endpointName = $"{serviceName} {_defaultVersion}";
 
                 c.DocumentTitle = $"{serviceName} api docs";
-                c.SwaggerEndpoint($"/{RoutePrefix}/{serviceName}/swagger.json", endpointName);
-                c.RoutePrefix = RoutePrefix;
+                c.SwaggerEndpoint($"/{_routePrefix}/{serviceName}/swagger.json", endpointName);
+                c.RoutePrefix = _routePrefix;
                 c.DisplayRequestDuration();
                 c.DisplayOperationId();
             });
