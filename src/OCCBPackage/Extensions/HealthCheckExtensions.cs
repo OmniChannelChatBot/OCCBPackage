@@ -10,7 +10,7 @@ using System.Text.Json;
 
 namespace OCCBPackage.Extensions
 {
-    public static class HealthCheckExtension
+    public static class HealthCheckExtensions
     {
         public static IHealthChecksBuilder AddCustomHealthChecks(this IServiceCollection services)
         {
