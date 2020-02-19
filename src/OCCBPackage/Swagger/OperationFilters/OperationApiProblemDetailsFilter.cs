@@ -45,13 +45,15 @@ namespace OCCBPackage.Swagger.OperationFilters
                         Description = Constants.ProblemTypes[statusCode].Item1,
                         Content = new Dictionary<string, OpenApiMediaType>
                         {
-                        {
-                            _mediaType ?? MediaTypeNames.Application.Json,
-                            new OpenApiMediaType
                             {
-                                Schema = operationFilterContext.SchemaGenerator.GenerateSchema(_schema, operationFilterContext.SchemaRepository)
-                            }
-                        },
+                                _mediaType ?? MediaTypeNames.Application.Json,
+                                new OpenApiMediaType
+                                {
+                                    Schema = operationFilterContext
+                                            .SchemaGenerator
+                                            .GenerateSchema(_schema, operationFilterContext.SchemaRepository)
+                                }
+                            },
                         }
                     });
             }

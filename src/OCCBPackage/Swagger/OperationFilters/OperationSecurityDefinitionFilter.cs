@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
+using OCCBPackage.Mvc;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 
 namespace OCCBPackage.Swagger.OperationFilters
 {
@@ -15,12 +17,12 @@ namespace OCCBPackage.Swagger.OperationFilters
             _openApiReferenceId = openApiReferenceId;
 
         /// <inheritdoc/>
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        public void Apply(OpenApiOperation openApiOperation, OperationFilterContext operationFilterContext)
         {
-            var isAuthorize = context.ApiDescription.ActionDescriptor.EndpointMetadata
+            var isAuthorize = operationFilterContext.ApiDescription.ActionDescriptor.EndpointMetadata
                 .Any(s => s is AuthorizeAttribute);
 
-            var isAllowAnonymous = context.ApiDescription.ActionDescriptor.EndpointMetadata
+            var isAllowAnonymous = operationFilterContext.ApiDescription.ActionDescriptor.EndpointMetadata
                .Any(s => s is AllowAnonymousAttribute);
 
             if (isAuthorize && !isAllowAnonymous)
@@ -34,14 +36,29 @@ namespace OCCBPackage.Swagger.OperationFilters
                     }
                 };
 
-                operation.Security = new List<OpenApiSecurityRequirement>
+                openApiOperation.Security = new List<OpenApiSecurityRequirement>
                 {
                     new OpenApiSecurityRequirement { [schema] = new string[]{ _openApiReferenceId } }
                 };
 
-                operation.Responses.Add(
+                openApiOperation.Responses.Add(
                     StatusCodes.Status401Unauthorized.ToString(),
-                    new OpenApiResponse { Description = "Unauthorized" });
+                    new OpenApiResponse
+                    {
+                        Description = Constants.ProblemTypes[StatusCodes.Status401Unauthorized].Item1,
+                        Content = new Dictionary<string, OpenApiMediaType>
+                        {
+                            {
+                                MediaTypeNames.Application.Json,
+                                new OpenApiMediaType
+                                {
+                                    Schema = operationFilterContext
+                                            .SchemaGenerator
+                                            .GenerateSchema(typeof(ApiProblemDetails), operationFilterContext.SchemaRepository)
+                                }
+                            },
+                        }
+                    });
             }
         }
     }
